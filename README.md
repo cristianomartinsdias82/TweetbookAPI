@@ -21,6 +21,7 @@ Logging/auditing (To do!)
 Database access by using Entity Framework Core DataContext class along with command-line Migrations
 Developer documentation
  - Swagger web page
+ 
 API Client SDK for consumers with samples (To do!) -> https://www.youtube.com/watch?v=grBTYaTGLv8&list=PLUOequmGnXxOgmSDWU7Tl6iQTsOtyjtwU&index=24
  - Refit (RestService class) by defining API interfaces
 Initial dataload with server initialization code
