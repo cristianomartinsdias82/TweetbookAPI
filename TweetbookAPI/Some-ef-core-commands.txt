@@ -1,0 +1,9 @@
+﻿.NET Core getting started -> https://docs.microsoft.com/en-us/ef/core/get-started/?tabs=netcore-cli
+Web Token vizualizer page -> https://jwt.ms/
+
+EF Core CLI commands
+dotnet tool install --global dotnet-ef
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet ef migrations add InitialCreate | Add-Migration InitialCreate
+dotnet ef migrations remove InitialCreate | Remove-Migration InitialCreate
+dotnet ef database update | Update-Database
