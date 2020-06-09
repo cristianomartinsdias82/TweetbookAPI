@@ -29,7 +29,7 @@ namespace TweetbookAPI.Contracts.V1.Requests.Validation
                         return x.Value > DateTime.Now;
 
                     return true;
-                });
+                }).WithMessage("Display until must be greater than current date");
         }
     }
 }

@@ -8,6 +8,7 @@ using TweetbookAPI.Infrastructure;
 using TweetbookAPI.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace TweetbookAPI.Controllers.V1
 {
@@ -24,16 +25,31 @@ namespace TweetbookAPI.Controllers.V1
             _postService = postService;
         }
 
+        //The comments below are consumed and published by Swagger documentation! (Refer to SwaggerInstaller.cs file)
+        /// <summary>
+        /// Retrieves all tags for an existing post
+        /// </summary>
+        /// <response code="200">Retrieves all post tags</response>
         //[Authorize(Policy = ResourcePolicies.ViewTagPermissionPolicy)]//(Pre-configured in SecurityConcernsInstaller class) It checks the requesting user data against the policy and hits or not this endpoint
         [Authorize(Policy = ResourcePolicies.InternalEmployeePermissionPolicy)]
         [HttpGet("GetTagsByPost/{postId}")]
-        public async Task<IEnumerable<Tag>> Get(int postId)
+        public async Task<IEnumerable<MaintainTagResponse>> Get(int postId)
         {
-            return await _postService.GetTagsByPostAsync(postId);
+            var tags = await _postService.GetTagsByPostAsync(postId);
+
+            return tags.BatchCastTo<MaintainTagResponse>();
         }
 
+        //The comments below are consumed and published by Swagger documentation! (Refer to SwaggerInstaller.cs file)
+        /// <summary>
+        /// Created a new tag, assigned to an existing post
+        /// </summary>
+        /// <response code="201">Retrieves the created tag</response>
+        /// <response code="500">Returns internal server error</response>
         [Authorize(Policy = ResourcePolicies.InternalEmployeePermissionPolicy)]
         [HttpPost("{postId}")]
+        [ProducesResponseType(typeof(MaintainTagResponse), (int)HttpStatusCode.Created)]
+        [ProducesErrorResponseType(typeof(MaintainTagResponse))]
         public async Task<IActionResult> Post(MaintainTagRequest request, int postId)
         {
             var newTag = request.CastTo<Tag>();
@@ -47,7 +63,7 @@ namespace TweetbookAPI.Controllers.V1
                 return CreatedAtRoute(new { id = response.Id }, response);
             }
 
-            return Problem();
+            return Problem(statusCode: (int)HttpStatusCode.InternalServerError);
         }
     }
 }
