@@ -15,5 +15,7 @@ namespace TweetbookAPI.Infrastructure.ServiceInstallers
             .AddPostServiceCheck(nameof(PostService)) //Custom extension method
             .AddCheck<PostServiceHealthChecking>("Post service");
         }
+
+        public int Order { get; } = 6;
     }
 }

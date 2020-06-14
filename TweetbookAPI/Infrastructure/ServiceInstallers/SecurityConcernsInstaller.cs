@@ -61,11 +61,20 @@ namespace TweetbookAPI.Infrastructure.ServiceInstallers
                     {
                         policy.AddRequirements(new UserWorksForCompanyRequirement("MYCOMPANY.COM.BR"));
                     });
+
+                    //Requirement-based (information ownership) policy
+                    options.AddPolicy(ResourcePolicies.InformationOwnershipPermissionPolicy, policy =>
+                    {
+                        policy.AddRequirements(new InformationOwnershipRequirement());
+                    });
                 });
             services.AddSingleton<IAuthorizationHandler, UserWorksForCompanyAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, UserIsInformationOwnerAuthorizationHandler>();
 
             //AUTHENTICATION SERVICE DEPENDENCY
             services.AddScoped<IAuthService, AuthService>();
         }
+
+        public int Order { get; } = 2;
     }
 }

@@ -21,7 +21,7 @@ namespace TweetbookAPI.Infrastructure.ServiceInstallers
                     //This filter requires the clients to send a valid api key on a per-request basis
                     options.Filters.Add<ClientApiKeyValidationFilter>(order:1);
 
-                    options.Filters.Add<DataContractValidationFilter>(order:2); //Input parameter validaion
+                    options.Filters.Add<DataContractValidationFilter>(order:2); //Input parameter validation
                     //This filter aims to centralize action method validation logic, i.e.,
                     //the developer does not need to write data validation logic (ModelState) in each and every action method in order to return BadRequest to the users, for example.
                 })
@@ -40,5 +40,7 @@ namespace TweetbookAPI.Infrastructure.ServiceInstallers
             //DATETIME ADAPTER
             services.AddTransient<IDateTime, DateTimeAdapter>();
         }
+
+        public int Order { get; } = 1;
     }
 }

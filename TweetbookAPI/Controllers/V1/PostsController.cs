@@ -10,7 +10,7 @@ using TweetbookAPI.Services;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using System.Linq;
+using TweetbookAPI.Infrastructure.Filters;
 
 namespace TweetbookAPI.Controllers.V1
 {
@@ -93,12 +93,14 @@ namespace TweetbookAPI.Controllers.V1
         /// Updates a post in the application database
         /// </summary>
         /// <response code="200">Inserts a new post into the application database</response>
+        /// <response code="403">Returns forbidden in case the requesting user is not the post owner</response>
         /// <response code="404">Returns not found</response>
-
         [MapToApiVersion("1")]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(MaintainPostResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(MaintainPostResponse), (int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(MaintainPostResponse), (int)HttpStatusCode.NotFound)]
+        [PostOwnershipValidationFilter]
         public async Task<ActionResult> Update(int id, MaintainPostRequest updatePostRequest)
         {
             var post = updatePostRequest.CastTo<Post>();
@@ -118,13 +120,16 @@ namespace TweetbookAPI.Controllers.V1
         /// <summary>
         /// Updates a post in the application database
         /// </summary>
-        /// <response code="204">Inserts a new post into the application database</response>
+        /// <response code="204">Returns no content (after all, there is no content to be returned when deleted)</response>
+        /// <response code="403">Returns forbidden in case the requesting user is not the post owner</response>
         /// <response code="404">Returns a not found response</response>
         [MapToApiVersion("1")]
         [HttpDelete("{id}")]
         [Authorize(Roles = ApplicationRoles.Administrators)]
         [ProducesResponseType(typeof(MaintainPostResponse), (int)HttpStatusCode.NoContent)]
+        [ProducesResponseType(typeof(MaintainPostResponse), (int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(MaintainPostResponse), (int)HttpStatusCode.NotFound)]
+        [PostOwnershipValidationFilter]
         public async Task<ActionResult> Delete(int id)
         {
             if (await _postService.RemoveAsync(id))

@@ -6,5 +6,6 @@ namespace TweetbookAPI.Infrastructure.ServiceInstallers
     public interface IInstaller
     {
         void InstallServices(IServiceCollection serviceCollection, IConfiguration configuration);
+        int Order { get; }
     }
 }

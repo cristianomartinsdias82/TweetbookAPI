@@ -17,7 +17,7 @@ namespace TweetbookAPI.Infrastructure
             typeof(Startup).Assembly.ExportedTypes
                 .Where(it => typeof(IInstaller).IsAssignableFrom(it) && !it.IsInterface && !it.IsAbstract)
                 .Select(Activator.CreateInstance)
-                .Cast<IInstaller>().ToList()
+                .Cast<IInstaller>().OrderBy(inst => inst.Order).ToList()
                 .ForEach(it => it.InstallServices(services, configuration));
         }
     }

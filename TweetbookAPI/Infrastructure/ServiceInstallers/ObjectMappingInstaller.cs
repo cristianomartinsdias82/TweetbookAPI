@@ -10,5 +10,7 @@ namespace TweetbookAPI.Infrastructure.ServiceInstallers
         {
             services.AddAutoMapper(typeof(Startup));
         }
+
+        public int Order { get; } = 5;
     }
 }

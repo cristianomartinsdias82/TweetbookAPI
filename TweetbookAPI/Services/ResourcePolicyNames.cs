@@ -12,13 +12,15 @@ namespace TweetbookAPI.Services
             {
                 [ViewTagPermissionPolicy] = "tags.view",
                 [DeletePostPermissionPolicy] = "posts.delete",
-                [InternalEmployeePermissionPolicy] = "internalemployee"
+                [InternalEmployeePermissionPolicy] = "internalemployee",
+                [InformationOwnershipPermissionPolicy] = "informationownership"
             };
         }
 
         public const string ViewTagPermissionPolicy = "ViewTagPermissionPolicy";
         public const string DeletePostPermissionPolicy = "DeletePostPermissionPolicy";
         public const string InternalEmployeePermissionPolicy = "InternalEmployeePermissionPolicy";
+        public const string InformationOwnershipPermissionPolicy = "InformationOwnershipPermissionPolicy";
 
         public static string TryGetPolicyMetaname(string resourcePolicyName)
         {

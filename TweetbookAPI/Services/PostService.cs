@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TweetbookAPI.Data;
 using TweetbookAPI.Domain;
@@ -13,12 +12,14 @@ namespace TweetbookAPI.Services
 {
     public class PostService : TweetbookAppService<Post>, IPostService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        //private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PostService(DataContext dataContext, IHttpContextAccessor httpContextAccessor) : base(dataContext)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
+        //public PostService(DataContext dataContext, IHttpContextAccessor httpContextAccessor) : base(dataContext)
+        //{
+        //    _httpContextAccessor = httpContextAccessor;
+        //}
+
+        public PostService(DataContext dataContext) : base(dataContext) {}
 
         public override async Task<bool> UpdateAsync(Post item)
         {
@@ -28,10 +29,13 @@ namespace TweetbookAPI.Services
             if (itemToUpdate == null)
                 return await Task.FromResult(false);
 
-            if (!CurrentUserIsOwner(itemToUpdate.UserId))
-                return await Task.FromResult(false);
+            //The infrastructure evaluates for us via PostOwnershipValidationFilter where applied
+            //But what if the developer forgets to decorate the endpoint with the attribute aforementioned? In this case, uncomment the line below or adopt a better coding strategy*
+            //if (!CurrentUserIsOwner(itemToUpdate.UserId))
+            //    return await Task.FromResult(false);
+            //*throw new SecurityException("Access denied to the request resource or operation")
 
-            //DataContext.Set<T>().Update(item);
+            //DataContext.Set<T>().Update(item); //See next line below
 
             //https://stackoverflow.com/questions/7106211/entity-framework-why-explicitly-set-entity-state-to-modified
             item.UserId = itemToUpdate.UserId;
@@ -49,8 +53,11 @@ namespace TweetbookAPI.Services
             var itemToRemove = await GetByIdAsync(id);
             if (itemToRemove != null)
             {
-                if (!CurrentUserIsOwner(itemToRemove.UserId))
-                    return await Task.FromResult(false);
+                //The infrastructure evaluates for us via PostOwnershipValidationFilter where applied
+                //But what if the developer forgets to decorate the endpoint with the attribute aforementioned? In this case, uncomment the line below or adopt a better coding strategy*
+                //if (!CurrentUserIsOwner(itemToRemove.UserId))
+                //    return await Task.FromResult(false);
+                //*throw new SecurityException("Access denied to the request resource or operation")
 
                 DataContext.Entry(itemToRemove).State = EntityState.Deleted;
                 await DataContext.SaveChangesAsync();
@@ -83,6 +90,7 @@ namespace TweetbookAPI.Services
             return await Task.FromResult((Tag)null);
         }
 
-        private bool CurrentUserIsOwner(string postUserId) => string.Equals(_httpContextAccessor.HttpContext.GetCurrentUserId(), postUserId, StringComparison.Ordinal);
+        //The infrastructure evaluates for us via PostOwnershipValidationFilter where applied
+        //private bool CurrentUserIsOwner(string postUserId) => string.Equals(_httpContextAccessor.HttpContext.GetCurrentUserId(), postUserId, StringComparison.Ordinal);
     }
 }

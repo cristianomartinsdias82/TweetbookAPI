@@ -15,5 +15,7 @@ namespace TweetbookAPI.Infrastructure.ServiceInstallers
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
         }
+
+        public int Order { get; } = 3;
     }
 }

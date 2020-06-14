@@ -58,5 +58,7 @@ namespace TweetbookAPI.Infrastructure.ServiceInstallers
             //For Swagger documentation increment purposes
             services.AddSwaggerExamplesFromAssemblyOf<Startup>();
         }
+
+        public int Order { get; } = 4;
     }
 }
